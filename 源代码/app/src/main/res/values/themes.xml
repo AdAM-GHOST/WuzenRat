@@ -1,0 +1,9 @@
+<resources>
+    <style name="Theme.LongPollingDemo" parent="@android:style/Theme.Holo.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:buttonStyle">@android:style/Widget.Holo.Button</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+</resources>
